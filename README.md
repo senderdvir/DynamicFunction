@@ -15,4 +15,4 @@ This repository contains a Python project that demonstrates how to execute funct
 You can install the required dependencies using:
 
 ```bash
-pip install pandas
+pip install -r requirements.txt
