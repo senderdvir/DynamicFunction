@@ -22,3 +22,47 @@ def count_records(df: pd.DataFrame, range_between: list) -> bool:
     else:
         return False
 
+
+def data_quality_test_null_values(df: pd.DataFrame) -> bool:
+    """
+    Checks if there are any null values in the DataFrame.
+
+    :param df: The pandas DataFrame whose null values are to be checked.
+    :return: True if there are no null values, otherwise False.
+    """
+    # Check if there are any null values in the DataFrame
+    if df.isnull().values.any():
+        return False
+    else:
+        return True
+
+
+def quality_test_schema_check(df: pd.DataFrame) -> bool:
+    """
+    Checks if the DataFrame has the expected schema.
+
+    :param df: The pandas DataFrame whose schema is to be checked.
+    :return: True if the DataFrame has the expected schema, otherwise False.
+    """
+    # Check if the DataFrame has the expected schema
+    if df.columns.tolist() == ["Name", "Age"]:
+        return True
+    else:
+        return False
+
+
+def datatypes_validator_by_schema(df: pd.DataFrame, schema: dict) -> bool:
+    """
+    Checks if the datatypes in the DataFrame match the expected schema.
+
+    :param df: The pandas DataFrame whose datatypes are to be checked.
+    :param schema: A dictionary containing the expected datatypes for each column.
+    :return: True if the datatypes in the DataFrame match the expected schema, otherwise False.
+    """
+    # Check if the datatypes in the DataFrame match the expected schema
+    if df.dtypes.to_dict() == schema:
+        return True
+    else:
+        return False
+
+
