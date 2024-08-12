@@ -16,10 +16,10 @@ def run_dynamic_function(function_name, *args, **kwargs):
 
 def main():
     # Read your data
-    operational_df = pd.read_csv('operational_table.csv')
+    operational_df = pd.read_csv('utils\operational_table.csv')
     for index, row in operational_df.iterrows():
         if row.get("is_active") == 1:
-            bank_data = pd.read_csv(row.get("file_name"))
+            bank_data = pd.read_csv("data\\"+row.get("file_name"))
 
         # List of functions
             function_name = row.get("test")

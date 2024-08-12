@@ -1,5 +1,0 @@
-﻿file_name,TCID,is_active,test,tested_field,expected_value
-bank_transactions.csv,TC01,1,count_records,TransactionID,1048567
-bank_transactions.csv,TC02,0,say_hello,TransactionID,1048567
-
-
