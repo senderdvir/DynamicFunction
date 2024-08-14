@@ -1,4 +1,7 @@
 # Define CountRecords function
+import pandas as pd
+
+
 def count_records(df, range_between):
     print(len(df))
     if range_between[0] < len(df) < range_between[1]:
@@ -10,13 +13,23 @@ def count_records(df, range_between):
 def say_hello(name):
     print(name)
 
-    # validate data types - consistency test
-    def validate_data_types(df, expected_types):
-        mismatched_types = {}
-        for column, expected_type in expected_types.items():
-            if not df[column].dtype == expected_type:
-                mismatched_types[column] = (df[column].dtype, expected_type)
-        return bool(mismatched_types), mismatched_types
+ # validate data types - consistency test
+def validate_data_types(df: pd.DataFrame, expected_types):
+    """
+    This function check data types at given df.
+
+    :param:
+        df - input df .....
+        expected_types - list\dict\string.....
+    :return: if ..... return true
+            else return false
+    """
+    mismatched_types = {}
+    for column, expected_type in expected_types.items():
+        if not df[column].dtype == expected_type:
+            mismatched_types[column] = (df[column].dtype, expected_type)
+    print(bool(not mismatched_types), mismatched_types)
+    return bool(not mismatched_types), mismatched_types
 
 
 # verifying that the data is updated

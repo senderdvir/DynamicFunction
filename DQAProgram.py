@@ -54,7 +54,6 @@ def execute_functions(operational_df: pd.DataFrame) -> None:
         if row.get("is_active") == 1:
             # Read the corresponding data file
             bank_data = pd.read_csv("data/" + row.get("file_name"))
-
             # Get the function name to execute
             function_name = row.get("test")
 
@@ -64,6 +63,8 @@ def execute_functions(operational_df: pd.DataFrame) -> None:
                     run_dynamic_function(function_name='count_records', df=bank_data, range_between=[1, 1048568])
                 case 'say_hello':
                     run_dynamic_function(function_name='say_hello', name='adi')
+                case 'validate_data_types':
+                    run_dynamic_function(function_name='validate_data_types', df=bank_data, expected_types=bank_data.dtypes)
 
 
 def main():
@@ -72,7 +73,7 @@ def main():
 
     :return: None
     """
-    operational_df = read_csv_to_df('utils/operational_table.csv')
+    operational_df = read_csv_to_df('data/operational_table.csv')
     execute_functions(operational_df)
 
 
