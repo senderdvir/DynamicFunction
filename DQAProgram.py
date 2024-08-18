@@ -1,4 +1,4 @@
-
+import pandas as pd
 from utils.OperationalTestFunctions import *
 
 
@@ -21,7 +21,6 @@ def run_dynamic_function(function_name: str, *args, **kwargs):
         if callable(func):
             # Call the function with the provided arguments
             return func(*args, **kwargs)
-
         else:
             raise ValueError(f"Function {function_name} not found or not callable.")
     except Exception as e:
@@ -51,8 +50,6 @@ def execute_functions(operational_df: pd.DataFrame) -> None:
     :param operational_df: A DataFrame containing test configurations.
     :return: None
     """
-    loan_data = read_csv_to_df('data/loan.csv')
-
     for index, row in operational_df.iterrows():
         if row.get("is_active") == 1:
             # Read the corresponding data file
@@ -66,10 +63,9 @@ def execute_functions(operational_df: pd.DataFrame) -> None:
                     run_dynamic_function(function_name='count_records', df=bank_data, range_between=[1, 1048568])
                 case 'say_hello':
                     run_dynamic_function(function_name='say_hello', name='adi')
-                case 'check_nulls':
-                    run_dynamic_function(function_name='check_nulls', df=loan_data, column_names='Loan_ID')
-                case 'validate_missing_values':
-                    run_dynamic_function(function_name='validate_missing_values', df=loan_data, column_names="Gender")
+                case 'validate_data_types':
+                    run_dynamic_function(function_name='validate_data_types', df=bank_data,
+                                         expected_types=bank_data.dtypes)
 
 
 def main():
