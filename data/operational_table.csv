@@ -1,5 +1,9 @@
 ﻿file_name,TCID,is_active,test,tested_field,expected_value
-bank_transactions.csv,TC01,1,count_records,TransactionID,1048567
-bank_transactions.csv,TC02,1,validate_data_types,TransactionID,1048567
+bank_transactions.csv,TC01,0,count_records,TransactionID,1048567
+bank_transactions.csv,TC02,0,validate_data_types,TransactionID,1048567
+loan.csv,TC03,0,check_nulls,Loan_ID,0
+loan.csv,TC04,1,validate_missing_values,CustomerID,False
+
+
 
 
