@@ -1,6 +1,6 @@
 # Define CountRecords function
 import pandas as pd
-
+from S3Handler.S3Client import S3Client
 
 def count_records(df, range_between):
     print(len(df))
@@ -8,10 +8,6 @@ def count_records(df, range_between):
         return True
     else:
         return False
-
-
-def say_hello(name):
-    print(name)
 
  # validate data types - consistency test
 def validate_data_types(df: pd.DataFrame, expected_types):
@@ -78,3 +74,14 @@ def check_missing_files(received_df, control_df):
     is_matched = len(missing_files) == 0
 
     return is_matched, list(missing_files) if not is_matched else None
+
+
+def basic_tests(table_name) -> bool:
+    print("Running basic tests")
+    s3_client = S3Client(bucket_name='bank-data')
+    data_df = s3_client.get_csv_file_into_df(key=f'raw/{table_name}.csv')
+    control_df = s3_client.get_txt_file_into_df(key=f'raw/control_{table_name}.txt')
+    print(data_df.equals(control_df))
+    return data_df.equals(control_df)
+
+        
