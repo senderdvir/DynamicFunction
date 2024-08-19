@@ -41,11 +41,12 @@ def validate_date_range(df, date_column, start_date, end_date):
 
 
 # check if unique columns containing nulls
-def check_nulls(df, column):
+def check_nulls(df: pd.DataFrame, column):
     null_count = df[column].isnull().sum()  # Count nulls in the specified column
     has_nulls = null_count > 0
+    print(f'Has null: {has_nulls}')
+    return has_nulls
 
-    return null_count, has_nulls
 
 
 # check if unique columns containing duplicates

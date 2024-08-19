@@ -66,6 +66,8 @@ def execute_functions(operational_df: pd.DataFrame) -> None:
                 case 'validate_data_types':
                     run_dynamic_function(function_name='validate_data_types', df=bank_data,
                                          expected_types=bank_data.dtypes)
+                case 'check_nulls':
+                    run_dynamic_function(function_name='check_nulls', df=bank_data, column='Gender')
 
 
 def main():
