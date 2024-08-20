@@ -15,27 +15,28 @@ def say_hello(name):
 
 
 # validate data types - consistency test
-def validate_data_types(df: pd.DataFrame, expected_types):
-    """
-    This function check data types at given df.
-
-    :param:
-        df - input df .....
-        expected_types - list\dict\string.....
-    :return: if ..... return true
-            else return false
-    """
-    mismatched_types = {}
-    for column, expected_type in expected_types.items():
-        if not df[column].dtype == expected_type:
-            mismatched_types[column] = (df[column].dtype, expected_type)
-    print(bool(not mismatched_types), mismatched_types)
-    return bool(not mismatched_types), mismatched_types
+# def validate_data_types(df: pd.DataFrame, expected_types):
+#     """
+#     This function check data types at given df.
+#
+#     :param:
+#         df - input df .....
+#         expected_types - list\dict\string.....
+#     :return: if ..... return true
+#             else return false
+#     """
+#     mismatched_types = {}
+#     for column, expected_type in expected_types.items():
+#         if not df[column].dtype == expected_type:
+#             mismatched_types[column] = (df[column].dtype, expected_type)
+#     print(bool(not mismatched_types), mismatched_types)
+#     return bool(not mismatched_types), mismatched_types
 
 
 # verifying that the data is updated
-def validate_date_range(df, date_column, start_date, end_date):
+def validate_date_range(df: pd.DataFrame, date_column, start_date, end_date):
     invalid_dates = df[date_column][(df[date_column] < start_date) | (df[date_column] > end_date)]
+    print(f'The invalid dates: {invalid_dates}')
     return (not invalid_dates.empty, invalid_dates.tolist()
     if not invalid_dates.empty else None)
 

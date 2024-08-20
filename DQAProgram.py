@@ -13,6 +13,7 @@ def run_dynamic_function(function_name: str, *args, **kwargs):
     :raises ValueError: If the function is not found or not callable.
     :raises Exception: If an error occurs while trying to run the function.
     """
+
     try:
         # Get the function from the global namespace using its name
         func = globals().get(function_name)
@@ -68,6 +69,9 @@ def execute_functions(operational_df: pd.DataFrame) -> None:
                                          expected_types=bank_data.dtypes)
                 case 'check_nulls':
                     run_dynamic_function(function_name='check_nulls', df=bank_data, column='Gender')
+                case 'validate_date_range':
+                    run_dynamic_function(function_name='validate_date_range', df=bank_data, date_column='CustomerDOB',
+                                         start_date='1/1/1700', end_date='1/1/1850')
 
 
 def main():

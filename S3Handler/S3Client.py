@@ -1,4 +1,4 @@
-from minio import Minio
+import minio
 import pandas as pd
 import io
 
@@ -21,7 +21,7 @@ class S3Client:
         self.minio_secret_key = MINIO_SECRET_KEY
 
         # Create a MinIO client
-        self.client = Minio(
+        self.client = minio.Minio(
             self.minio_endpoint,
             access_key=self.minio_access_key,
             secret_key=self.minio_secret_key,
