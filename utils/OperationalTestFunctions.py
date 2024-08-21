@@ -49,6 +49,11 @@ def check_nulls(df: pd.DataFrame, column):
     return has_nulls
 
 
+def sayHello():
+    print("hello")
+
+
+
 
 # check if unique columns containing duplicates
 
