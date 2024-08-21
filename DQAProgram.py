@@ -13,6 +13,7 @@ def run_dynamic_function(function_name: str, *args, **kwargs):
     :raises ValueError: If the function is not found or not callable.
     :raises Exception: If an error occurs while trying to run the function.
     """
+
     try:
         # Get the function from the global namespace using its name
         func = globals().get(function_name)
@@ -52,7 +53,6 @@ def execute_functions(operational_df: pd.DataFrame) -> None:
     """
     for index, row in operational_df.iterrows():
         if row.get("is_active") == 1:
-            print(row.get("test"))
             # Read the corresponding data file
             bank_data = pd.read_csv("data/" + row.get("file_name"))
             # Get the function name to execute
@@ -62,10 +62,16 @@ def execute_functions(operational_df: pd.DataFrame) -> None:
             match function_name:
                 case 'count_records':
                     run_dynamic_function(function_name='count_records', df=bank_data, range_between=[1, 1048568])
+                case 'say_hello':
+                    run_dynamic_function(function_name='say_hello', name='adi')
                 case 'validate_data_types':
-                    run_dynamic_function(function_name='validate_data_types', df=bank_data, expected_types=bank_data.dtypes)
-                case 'basic_tests':
-                    run_dynamic_function(function_name='basic_tests', table_name="bank_transaction_1")
+                    run_dynamic_function(function_name='validate_data_types', df=bank_data,
+                                         expected_types=bank_data.dtypes)
+                case 'check_nulls':
+                    run_dynamic_function(function_name='check_nulls', df=bank_data, column='Gender')
+                case 'validate_date_range':
+                    run_dynamic_function(function_name='validate_date_range', df=bank_data, date_column='CustomerDOB',
+                                         start_date='1/1/1700', end_date='1/1/1850')
 
 
 def main():

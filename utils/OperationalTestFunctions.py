@@ -1,6 +1,6 @@
 # Define CountRecords function
 import pandas as pd
-from S3Handler.S3Client import S3Client
+
 
 def count_records(df, range_between):
     print(len(df))
@@ -9,38 +9,45 @@ def count_records(df, range_between):
     else:
         return False
 
- # validate data types - consistency test
-def validate_data_types(df: pd.DataFrame, expected_types):
-    """
-    This function check data types at given df.
 
-    :param:
-        df - input df .....
-        expected_types - list\dict\string.....
-    :return: if ..... return true
-            else return false
-    """
-    mismatched_types = {}
-    for column, expected_type in expected_types.items():
-        if not df[column].dtype == expected_type:
-            mismatched_types[column] = (df[column].dtype, expected_type)
-    print(bool(not mismatched_types), mismatched_types)
-    return bool(not mismatched_types), mismatched_types
+def say_hello(name):
+    print(name)
+
+
+# validate data types - consistency test
+# def validate_data_types(df: pd.DataFrame, expected_types):
+#     """
+#     This function check data types at given df.
+#
+#     :param:
+#         df - input df .....
+#         expected_types - list\dict\string.....
+#     :return: if ..... return true
+#             else return false
+#     """
+#     mismatched_types = {}
+#     for column, expected_type in expected_types.items():
+#         if not df[column].dtype == expected_type:
+#             mismatched_types[column] = (df[column].dtype, expected_type)
+#     print(bool(not mismatched_types), mismatched_types)
+#     return bool(not mismatched_types), mismatched_types
 
 
 # verifying that the data is updated
-def validate_date_range(df, date_column, start_date, end_date):
+def validate_date_range(df: pd.DataFrame, date_column, start_date, end_date):
     invalid_dates = df[date_column][(df[date_column] < start_date) | (df[date_column] > end_date)]
+    print(f'The invalid dates: {invalid_dates}')
     return (not invalid_dates.empty, invalid_dates.tolist()
     if not invalid_dates.empty else None)
 
 
 # check if unique columns containing nulls
-def check_nulls(df, column):
+def check_nulls(df: pd.DataFrame, column):
     null_count = df[column].isnull().sum()  # Count nulls in the specified column
     has_nulls = null_count > 0
+    print(f'Has null: {has_nulls}')
+    return has_nulls
 
-    return null_count, has_nulls
 
 
 # check if unique columns containing duplicates
@@ -74,14 +81,3 @@ def check_missing_files(received_df, control_df):
     is_matched = len(missing_files) == 0
 
     return is_matched, list(missing_files) if not is_matched else None
-
-
-def basic_tests(table_name) -> bool:
-    print("Running basic tests")
-    s3_client = S3Client(bucket_name='bank-data')
-    data_df = s3_client.get_csv_file_into_df(key=f'raw/{table_name}.csv')
-    control_df = s3_client.get_txt_file_into_df(key=f'raw/control_{table_name}.txt')
-    print(data_df.equals(control_df))
-    return data_df.equals(control_df)
-
-        

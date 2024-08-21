@@ -1,7 +1,6 @@
 ﻿file_name,TCID,is_active,test,tested_field,expected_value
 bank_transactions.csv,TC01,0,count_records,TransactionID,1048567
 bank_transactions.csv,TC02,0,validate_data_types,TransactionID,1048567
-bank_transactions.csv,TC02,1,basic_tests,TransactionAmount (INR),Null
-
-
+loan.csv,TC03,1,check_nulls,Gender,False
+bank_transactions.csv,TC4,1,validate_date_range,CustomerDOB,False
 
