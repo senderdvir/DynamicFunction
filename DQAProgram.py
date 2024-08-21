@@ -54,23 +54,24 @@ def execute_functions(operational_df: pd.DataFrame) -> None:
     for index, row in operational_df.iterrows():
         if row.get("is_active") == 1:
             # Read the corresponding data file
-            bank_data = pd.read_csv("data/" + row.get("file_name"))
+            # data = pd.read_csv("data/" + row.get("file_name"))
+            file_data = pd.read_parquet("data/" + row.get("file_name"))
             # Get the function name to execute
             function_name = row.get("test")
 
             # Dynamically match the function name and execute the corresponding function
             match function_name:
                 case 'count_records':
-                    run_dynamic_function(function_name='count_records', df=bank_data, range_between=[1, 1048568])
+                    run_dynamic_function(function_name='count_records', df=file_data, range_between=[1, 1048568])
                 case 'say_hello':
                     run_dynamic_function(function_name='say_hello', name='adi')
                 case 'validate_data_types':
-                    run_dynamic_function(function_name='validate_data_types', df=bank_data,
-                                         expected_types=bank_data.dtypes)
+                    run_dynamic_function(function_name='validate_data_types', df=file_data,
+                                         expected_types=file_data.dtypes)
                 case 'check_nulls':
-                    run_dynamic_function(function_name='check_nulls', df=bank_data, column='Gender')
+                    run_dynamic_function(function_name='check_nulls', df=file_data, column='Gender')
                 case 'validate_date_range':
-                    run_dynamic_function(function_name='validate_date_range', df=bank_data, date_column='CustomerDOB',
+                    run_dynamic_function(function_name='validate_date_range', df=file_data, date_column='CustomerDOB',
                                          start_date='1/1/1700', end_date='1/1/1850')
 
 
@@ -82,7 +83,9 @@ def main():
     """
     operational_df = read_csv_to_df('data/operational_table.csv')
     execute_functions(operational_df)
-
+    # df = pd.read_csv('data/bank_transactions.csv')
+    # df.to_parquet('data/bank_transactions.parquet', index=False)
+    
 
 if __name__ == '__main__':
     main()
