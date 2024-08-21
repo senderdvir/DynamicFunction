@@ -76,7 +76,8 @@ def main():
     """
     operational_df = read_csv_to_df('data/operational_table.csv')
     execute_functions(operational_df)
-
+    # df = pd.read_csv('data/bank_transactions.csv')
+    # df.to_parquet('data/bank_transactions.parquet', index=False)
 
 if __name__ == '__main__':
     main()
