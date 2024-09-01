@@ -1,13 +1,14 @@
-import pandas as pd
 import io  # allows the reading from and writing to files
 import sys  # access to variables and functions that interact with the Python interpreter.
-from Logger import write_to_status_table
-from utils.OperationalTestFunctions import *
 
+from anaconda_navigator.utils.url_utils import file_name
+
+from utils.Logger import write_to_status_table
+from utils.OperationalTestFunctions import *
 
 # Initialize the status table CSV file
 def initialize_status_table(file_path: str):
-    status_df = pd.DataFrame(columns=['TCID', 'status', 'logs'])
+    status_df = pd.DataFrame(columns=['TCID','status', 'logs'])
     status_df.to_csv(file_path, index=False)
 
 
@@ -109,19 +110,20 @@ def execute_functions(operational_df: pd.DataFrame) -> None:
                     success, logs = False, f"Function {function_name} not recognized"
             # Explicitly convert the success boolean to an integer (1 for True, 0 for False)
             status = int(success)  # Convert to integer here
-            operational_df.at[index, 'status'] = status
-            # TODO: write the data into the csv log file
+           # operational_df.at[index, 'status'] = status
+
+
 
             # Create a dictionary to write to the status table
-            status_data = {
+            data = {
                 'TCID': TCID,
                 'status': status,
                 'logs': logs
             }
             # TODO: write the data into the csv log file
-            write_to_status_table('status_table.csv', status_data)
+            write_to_status_table(data)
     # Save the updated operational DataFrame back to the CSV file
-    operational_df.to_csv('updated_operational_table.csv_table.csv', index=False)
+    operational_df.to_csv('data/operational_table.csv', index=False)
 
 
 def main():
@@ -130,9 +132,9 @@ def main():
 
     :return: None
     """
-    initialize_status_table('status_table.csv')
+    initialize_status_table('data/status_table.csv')
 
-    operational_df = read_csv_to_df('data/operational_table.csv')
+    operational_df = read_csv_to_df('data/updated_operational_table.csv')
     execute_functions(operational_df)
     # df = pd.read_csv('data/bank_transactions.csv')
     # df.to_parquet('data/bank_transactions.parquet', index=False)
