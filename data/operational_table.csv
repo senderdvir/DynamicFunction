@@ -1,6 +1,6 @@
-file_name,TCID,is_active,test,tested_field,expected_value
-TC01,1,count_records,TransactionID,1048500,
-TC02,1,validate_sum,LoanAmount,180000,
-TC03,0,validate_numeric_range,CustAccountBalance,,
-TC4,0,validate_date_range,CustomerDOB,False,
-TC05,0,file_freshness,file_date,True,
+file_name,TCID,is_active,test,tested_field,expected_value,status
+bank_transactions.parquet,TC01,1,count_records,TransactionID,1048500,
+loan.parquet,TC02,1,validate_sum,LoanAmount,180000,
+bank_transactions.parquet,TC03,0,validate_numeric_range,CustAccountBalance,,
+bank_transactions.parquet,TC4,0,validate_date_range,CustomerDOB,False,
+loan.parquet,TC05,0,file_freshness,file_date,True,

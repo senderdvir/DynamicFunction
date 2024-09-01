@@ -1,12 +1,6 @@
 # Define CountRecords function
 import pandas as pd
 
-
-# TODO: create function to write into the log csv and use it from the other functions
-# TODO: every function must return bool, string parameters \\
-# TODO: update the log file and not the operational table -created Logger.py file
-
-
 # Compare the record count in the DataFrame with the count provided in the control file.Test is passed.
 def count_records(df: pd.DataFrame, range_between):
     records_count = len(df)
@@ -80,8 +74,9 @@ def check_duplicates(df: pd.DataFrame, key_columns):
 
 
 # Verifies if there are any missing files compared to a list of expected file names
-def check_missing_files(df: pd.DataFrame, files_names: list, column_name: str) -> tuple:
+def check_missing_files(df:pd.DataFrame, files_names: list, column_name: str) -> tuple:
     """
+    :param df: the file with the files names
     :param files_names: A list of expected file names.
     :param column_name: The name of the column that contains the file names in the DataFrame.
     :return: A tuple (is_matched, missing_files).
