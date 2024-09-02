@@ -1,5 +1,6 @@
 # Define CountRecords function
 import pandas as pd
+from datetime import datetime
 
 # Compare the record count in the DataFrame with the count provided in the control file.Test is passed.
 def count_records(df: pd.DataFrame, range_between):
@@ -37,13 +38,23 @@ def check_foreign_key(df: pd.DataFrame, column_name, reference_pk):
         return False, f"Invalid foreign key values in {column_name}: {invalid_values[column_name].tolist()}"
 
 
-# ensure that the data is recent by comparing the timestamp\date column with the current date
-def file_freshness(df: pd.DataFrame, date_column, current_date):
+# ensure that the data is recent by comparing the date column with the current date
+def file_freshness(df: pd.DataFrame, date_column):
+    current_date = datetime.now().date()
     if df[date_column].max().date() == current_date:
         return True, "The file is updated for today"
     else:
         return False, f"Data is not fresh. Latest date: {df[date_column].max().date()}"
 
+
+# ensure that the data is recent by comparing the timestamp column (not date). Should consider timezone differences
+def file_timestamp(df: pd.DataFrame, timestamp_column: str):
+    current_timestamp = datetime.now()
+    latest_timestamp = df[timestamp_column].max()  # the most recent timestamp from the specified column
+    if latest_timestamp == current_timestamp:
+        return True, "The file is updated to the current timestamp"
+    else:
+        return False, f"Data is not fresh. Latest timestamp: {latest_timestamp}"
 
 # verifying that the data is updated according to requirements
 def validate_date_range(df: pd.DataFrame, date_column, start_date, end_date):

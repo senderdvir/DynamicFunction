@@ -1,7 +1,5 @@
-import io  # allows the reading from and writing to files
+import io  # allows the reading and writing to files
 import sys  # access to variables and functions that interact with the Python interpreter.
-
-from anaconda_navigator.utils.url_utils import file_name
 
 from utils.Logger import write_to_status_table
 from utils.OperationalTestFunctions import *
@@ -27,26 +25,31 @@ def run_dynamic_function(function_name: str, *args, **kwargs):
     try:
         # Get the function from the global namespace using its name
         func = globals().get(function_name)
+        print(f"Attempting to run function: {function_name}")  # Debugging line
 
         # Check if the function exists and is callable
         if callable(func):
-            captured_output = io.StringIO()  # class from 'io' creates an in memory file instead on disk
-            sys.stdout = captured_output  # 'sys.stdout' (standard output stream)  points to terminal by default, we instead redirect it to capture any print
-            # text to the 'captured_output' object
-            # captured_output =  an instance of io.StringIO, acts like an in memory file
+            captured_output = io.StringIO()  # Creates an in-memory file
+            sys.stdout = captured_output  # Redirect standard output to capture it
 
-            # Call the function with the provided arguments
-            result, logs = func(*args, **kwargs)
+            try:
+                # Call the function with the provided arguments
+                result = func(*args, **kwargs)
 
-            # Reset redirect
-            sys.stdout = sys.__stdout__  # restore sys.stdout to its default value (sys.__stdout__) so that further output behaves normally.
+                # Check if the function returns a tuple with two elements
+                if isinstance(result, tuple) and len(result) == 2:
+                    result, logs = result
+                else:
+                    result, logs = False, "Function did not return (boolean, logs)."
+            finally:
+                sys.stdout = sys.__stdout__  # restore sys.stdout to its default value
 
             # Get logs from captured output
             logs = captured_output.getvalue()  # getvalue() method of the StringIO returns all the text that has been "written" to this in-memory file so far as a single string.
 
             return result, logs
         else:
-            raise ValueError(f"Function {function_name} not found or not callable.")
+            raise ValueError(f'Function {function_name} not found or not callable.')
     except Exception as e:
         sys.stdout = sys.__stdout__  ## restore sys.stdout to its default value
         print("Error while trying to run the dynamic function.")
@@ -78,14 +81,13 @@ def execute_functions(operational_df: pd.DataFrame) -> None:
 
     for index, row in operational_df.iterrows():
         if row.get("is_active") == 1:
+            print(f"Processing TCID: {row.get('TCID')} with function {row.get('test')}")  # Debugging line
             # Read the corresponding data file
             # data = pd.read_csv("data/" + row.get("file_name"))
             file_data = pd.read_parquet("data/" + row.get("file_name"))
             # Get the function name to execute
             function_name = row.get("test")
             TCID = row.get("TCID")
-            # Initialize status and logs
-            # logs = ""
 
             # Dynamically match the function name and execute the corresponding function
             match function_name:
@@ -103,14 +105,14 @@ def execute_functions(operational_df: pd.DataFrame) -> None:
                     success, logs = run_dynamic_function('validate_date_range', df=file_data,
                                                          date_column='CustomerDOB', start_date='1/1/1700',
                                                          end_date='1/1/1850')
-                case 'file_freshness':
-                    success, logs = run_dynamic_function('file_freshness', df=file_data, date_column='file_date',
-                                                         current_date="8/22/2024 16:37")
+                case 'file_timestamp':
+                    success, logs = run_dynamic_function('file_timestamp', df=file_data,
+                                                         timestamp_column='TransactionTime')
                 case _:
                     success, logs = False, f"Function {function_name} not recognized"
             # Explicitly convert the success boolean to an integer (1 for True, 0 for False)
             status = int(success)  # Convert to integer here
-           # operational_df.at[index, 'status'] = status
+            operational_df.at[index, 'status'] = status
 
 
 
@@ -121,9 +123,10 @@ def execute_functions(operational_df: pd.DataFrame) -> None:
                 'logs': logs
             }
             # TODO: write the data into the csv log file
+            print(f"Writing to status table: {data}")
             write_to_status_table(data)
     # Save the updated operational DataFrame back to the CSV file
-    operational_df.to_csv('data/operational_table.csv', index=False)
+    operational_df.to_csv('data/updated_operational_table.csv', index=False)
 
 
 def main():
@@ -135,6 +138,7 @@ def main():
     initialize_status_table('data/status_table.csv')
 
     operational_df = read_csv_to_df('data/updated_operational_table.csv')
+    print(operational_df.head())  # Debugging line to check data
     execute_functions(operational_df)
     # df = pd.read_csv('data/bank_transactions.csv')
     # df.to_parquet('data/bank_transactions.parquet', index=False)
