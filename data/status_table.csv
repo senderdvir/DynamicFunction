@@ -1,3 +1,7 @@
 TCID,status,logs
-TC01,0,
-TC02,0,
+TC01,0,"Number of records: 1048567
+Result: Out of the expected range
+Count records in this file: 1048567"
+TC02,0,"Actual sum of LoanAmount: 86676.0
+Result: Expected sum 180000, but got 86676.0"
+TC05,0,Data is not fresh. Latest timestamp: 235959

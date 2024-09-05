@@ -10,10 +10,14 @@ def write_to_status_table(data: dict):
     """
     # Convert the dictionary to a DataFrame
     df = pd.DataFrame([data])
-    print(f'{data}')
+    print( f"Writing data to status table: {data}" )
     try:
-        # Try to append to the existing file
-        df.to_csv(file_path, mode='a', index=False, header=False)
+        # Try to append to the existing file without headers
+        df.to_csv( file_path, mode='a', index=False, header=False )
     except FileNotFoundError:
         # If file does not exist, create it with headers
-        df.to_csv(file_path, mode='w', index=False, header=True)
+        print( f"File {file_path} not found. Creating new file." )
+        df.to_csv( file_path, mode='w', index=False, header=True )
+    except Exception as e:
+        print( f"Error writing to file {file_path}: {e}" )
+        raise  # Re-raise the exception after logging it
